@@ -5,7 +5,10 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 
-var indexRouter = require('./routes/index');
+var authRouter = require('./routes/authRoutes');
+var categoryRouter = require('./routes/categoryRoutes');
+var itemRouter = require('./routes/itemRoutes');
+var orderRouter = require('./routes/orderRoutes');
 
 var app = express();
 
@@ -23,7 +26,10 @@ mongoose.connect('mongodb://localhost:27017/shopdb', {useNewUrlParser: true, use
   .then((result) => app.listen(3000))
   .catch((err) => console.log(err));
 
-app.use('/', indexRouter);
+app.use('/user', authRouter);
+app.use('/category', categoryRouter);
+app.use('/item', itemRouter);
+app.use('/order', orderRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
