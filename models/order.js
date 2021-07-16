@@ -12,7 +12,7 @@ const orderSchema = new mongoose.Schema ({
         },
         address: {
             type: String,
-            required: [true, 'Please enter phone no.']
+            required: [true, 'Please enter address']
         },
         appointed_time: {
             type: Date,
@@ -88,6 +88,24 @@ const orderSchema = new mongoose.Schema ({
         type: Boolean,
     }
 }, { timestamps: true });
+
+// static method to toggle confirm
+orderSchema.statics.confirm = async function(id, confirm) {
+    const result = await this.updateOne({ _id: id }, { confirmed: confirm });
+    if(result) {
+        return result.ok;
+    }
+    throw Error('cannot find order and confirm');
+};
+
+// static method to toggle cancel
+orderSchema.statics.cancel = async function(id, cancel) {
+    const result = await this.updateOne({ _id: id }, { canceled: cancel });
+    if(result) {
+        return result.ok;
+    }
+    throw Error('cannot find order and cancel');
+};
 
 const Order = mongoose.model('order', orderSchema);
 

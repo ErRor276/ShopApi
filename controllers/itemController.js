@@ -1,6 +1,5 @@
 const Item = require('../models/item');
 const Category = require('../models/category');
-const { json } = require('express');
 
 const handleErrors = (err) => {
     console.log(err.message, err.code);
