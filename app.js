@@ -6,9 +6,9 @@ var logger = require('morgan');
 var mongoose = require('mongoose');
 
 var authRouter = require('./routes/authRoutes');
-var categoryRouter = require('./routes/categoryRoutes');
-var itemRouter = require('./routes/itemRoutes');
-var orderRouter = require('./routes/orderRoutes');
+var shopRouter = require('./routes/shopRoutes');
+var adminRouter = require('./routes/adminRoutes');
+const { requireAuth, checkAdmin, checkUser } = require('./middlewares/authMiddleware');
 
 var app = express();
 
@@ -26,10 +26,9 @@ mongoose.connect('mongodb://localhost:27017/shopdb', {useNewUrlParser: true, use
   .then((result) => app.listen(3000))
   .catch((err) => console.log(err));
 
-app.use('/user', authRouter);
-app.use('/category', categoryRouter);
-app.use('/item', itemRouter);
-app.use('/order', orderRouter);
+app.use('/', authRouter);
+app.use('/', checkUser, shopRouter);
+app.use('/admin', [requireAuth, checkAdmin], adminRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -4,25 +4,46 @@ const Order = require('../models/order');
 const handleErrors = (err) => {
     console.log(err);
     let errors = { 
-        category_code: '', 
-        item_count: '', 
-        item: '', 
-        item_code: '', 
-        item_name: '',
-        price: '', 
-        stock: '', 
-        name: '',
+        delivery_info: '', 
+        receipt: '', 
+        order: '', 
+        item: '',
+        stock: ''
     };
+
+    // cannot find order and confirm
+    if (err.message === 'cannot find order and confirm') {
+        errors.order = 'Cannot find order and confirm';
+    }
+
+    // cannot find order and cancel
+    if (err.message === 'cannot find order and cancel') {
+        errors.order = 'Cannot find order and cancel';
+    }
+
+    // stock is less than buying amount
+    if (err.message === 'stock is less than buying amount') {
+        errors.stock = 'Stock is less than buying amount';
+    }
+
+    // stock is empty
+    if (err.message === 'stock is empty') {
+        errors.stock = 'Stock is empty';
+    }
 
     // item not found
     if (err.message === 'item not found') {
-        errors.item = 'Item does not exist';
+        errors.item = 'Item not found';
     }
 
-    // duplicate email error
-    if (err.code === 11000) {
-      errors.duplication = 'that item is already registered';
-      return errors;
+    // buying amount is invalid
+    if (err.message === 'buying amount is invalid') {
+        errors.stock = 'Buying amount is invalid';
+    }
+
+    // cannot update stock
+    if (err.message === 'cannot update stock') {
+        errors.stock = 'Cannot update stock';
     }
   
     // validation errors

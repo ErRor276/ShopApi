@@ -112,6 +112,7 @@ module.exports.item_update = async (req, res) => {
     try {
         const item = await Item.findOne({ item_code });
         if(item) {
+            // category changing
             if(item.category_code != category_code) {
                 const new_code = await Category.generateItemCode(category_code);
                 if(new_code) {
