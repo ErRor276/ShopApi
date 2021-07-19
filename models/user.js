@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema ({
         address: String,
         note: String
     },
-    wish_list: [{
+    wishlist: [{
         item_code: String
     }]
 });

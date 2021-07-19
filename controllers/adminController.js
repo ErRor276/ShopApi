@@ -50,7 +50,7 @@ module.exports.signup_post = async (req, res) => {
   try {
     const admin = await Admin.create({ name, email, password });
     const token = createToken(admin._id);
-    res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+    res.cookie('adminJwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
     res.status(201).json({ admin: admin._id });
   }
   catch(err) {
@@ -66,7 +66,7 @@ module.exports.login_post = async (req, res) => {
   try {
     const admin = await Admin.login(email, password);
     const token = createToken(admin._id);
-    res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+    res.cookie('adminJwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
     res.status(200).json({ admin: admin._id });
   } 
   catch (err) {
@@ -76,12 +76,12 @@ module.exports.login_post = async (req, res) => {
 
 }
 
-module.exports.logout_post = (req, res) => {
-    res.cookie('jwt', '', { maxAge: 1 });
+module.exports.logout_post = async (req, res) => {
+    res.cookie('adminJwt', '', { maxAge: 1 });
     res.send('logged out');
 }
 
-module.exports.admin_get_all = (req, res) => {
+module.exports.admin_get_all = async (req, res) => {
   try {
       const admins = await Admin.find({});
       res.status(200).json({ admins });
@@ -92,11 +92,24 @@ module.exports.admin_get_all = (req, res) => {
   }
 }
 
-module.exports.admin_get = (req, res) => {
+module.exports.admin_get = async (req, res) => {
   const id = req.params.id;
 
   try {
       const admin = await Admin.findOne({ _id: id });
+      res.status(200).json({ admin });
+  } 
+  catch (err) {
+      const errors = handleErrors(err);
+      res.status(400).json({ errors });
+  }
+}
+
+module.exports.admin_delete = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+      const admin = await Admin.deleteOne({ _id: id });
       res.status(200).json({ admin });
   } 
   catch (err) {
