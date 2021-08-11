@@ -9,6 +9,7 @@ const handleErrors = (err) => {
         item: '', 
         item_code: '', 
         item_name: '',
+        item_img: '',
         price: '', 
         stock: '', 
         name: '',
@@ -36,7 +37,10 @@ const handleErrors = (err) => {
   }
 
 module.exports.item_post = async (req, res) => {
-    const { item_name, category_code, description, price, stock, options, discount } = req.body;
+    const { item_name, item_img, category_code, description, price, stock, options, discount } = req.body;
+
+    // adding default image if not provided image
+    let tmp_img_url = item_img ?? "default image url";
 
     try {
         if(category_code) {
@@ -44,7 +48,8 @@ module.exports.item_post = async (req, res) => {
             if(item_code) {
                 const item = await Item.create({ 
                     item_code, 
-                    item_name, 
+                    item_name,
+                    item_img: tmp_img_url,
                     category_code, 
                     description, 
                     price, stock, 
@@ -95,12 +100,16 @@ module.exports.item_get = async (req, res) => {
 }
 
 module.exports.item_update = async (req, res) => {
-    const { item_name, category_code, description, price, stock, options, discount } = req.body;
+    const { item_name, item_img, category_code, description, price, stock, options, discount } = req.body;
     const item_code = req.params.item_code;
+
+    // adding default image if not provided image
+    let tmp_img_url = item_img ?? "default image url";
 
     let updateItem = {
         item_code,
-        item_name, 
+        item_name,
+        tmp_img_url,
         category_code, 
         description, 
         price, 

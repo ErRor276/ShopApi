@@ -10,6 +10,10 @@ const itemSchema = new mongoose.Schema ({
         type: String,
         required: [true, 'Please enter item name']
     },
+    item_img: {
+        type: String,
+        required: [true, 'Please add item image']
+    },
     category_code: {
         type: String,
         required: [true, 'Please choose a category']
